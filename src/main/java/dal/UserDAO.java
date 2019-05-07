@@ -12,8 +12,8 @@ import java.util.List;
 
 public class UserDAO implements IUserDAO {
 	private Connection createConnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185086?"
-				+ "user=s185086&password=PL9404AoCEaBAFfUjd9dG");
+		return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s160068?"
+				+ "user=s160068&password=D8meeg0vOUC5OjertVLZV");
 	}
 
 

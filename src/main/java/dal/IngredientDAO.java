@@ -1,18 +1,17 @@
 package dal;
 
 import dto.IIngredientDTO;
-import dto.IUserDTO;
-import dto.UserDTO;
+import dto.IngredientDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class IngredientDAO {
+public class IngredientDAO implements IIngredientDAO {
 	private Connection createConnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185086?"
-				+ "user=s185086&password=PL9404AoCEaBAFfUjd9dG");
+		return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s160068?"
+				+ "user=s160068&password=D8meeg0vOUC5OjertVLZV");
 	}
 
 
@@ -61,101 +60,79 @@ public class IngredientDAO {
 
 
 	@Override
-	public IUserDTO getUser(int userId) throws IUserDAO.DALException {
+	public IIngredientDTO getIngredient(int ingredientId) throws IIngredientDAO.DALException {
 
-		IUserDTO user = new UserDTO();
+		IIngredientDTO ingrediens = new IngredientDTO();
 
 
 		try {
 			Connection c = createConnection();
 
 			Statement st = c.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM userlist WHERE userID = " + userId);
+			ResultSet rs = st.executeQuery("SELECT * FROM Ingredienser WHERE ingrediens_id = " + ingredientId);
 			rs.next();
 
-			user.setUserId(rs.getInt("userID"));
-			user.setUserName(rs.getString("userName"));
-			user.setIni(rs.getString("ini"));
-
-			rs = st.executeQuery("SELECT roleName FROM roles WHERE userID = " + userId);
-			while(rs.next()){
-				user.getRoles().add(rs.getString(1));
-			}
-
+			ingrediens.setIngredientId(rs.getInt("ingrediens_id"));
+			ingrediens.setIngredientName(rs.getString("ingrediens_navn"));
+			ingrediens.setMargin(rs.getDouble("afvigelse"));
+			ingrediens.setActive(rs.getBoolean("isAktiv"));
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IUserDAO.DALException(e.getMessage());
+			throw new IIngredientDAO.DALException(e.getMessage());
 		}
-		return user;
+		return ingrediens;
 	}
 
 
 	@Override
-	public List<IUserDTO> getUserList() throws IUserDAO.DALException {
+	public List<IIngredientDTO> getIngredientList() throws IIngredientDAO.DALException {
 
-		IUserDTO user = new UserDTO();
-		List<IUserDTO> userList = new ArrayList<>();
+		IIngredientDTO user = new IngredientDTO();
+		List<IIngredientDTO> ingredientList = new ArrayList<>();
 
 		try {
 			Connection c = createConnection();
 			Statement st = c.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM userlist");
+			ResultSet rs = st.executeQuery("SELECT * FROM Ingredienser");
 
 			while (rs.next())
 			{
-				user.setUserId(rs.getInt("userID"));
-				user.setUserName(rs.getString("userName"));
-				user.setIni(rs.getString("ini"));
+				user.setIngredientId(rs.getInt("ingrediens_id"));
+				user.setIngredientName(rs.getString("ingrediens_navn"));
+				user.setMargin(rs.getDouble("afvigelse"));
 
-				userList.add(user);
+				ingredientList.add(user);
 			}
 
-			for (IUserDTO users: userList) {
-				rs = st.executeQuery("SELECT roleName FROM roles WHERE userID = " + user.getUserId());
-				while (rs.next()) {
-					users.getRoles().add(rs.getString(1));
-				}
-			}
 			c.close();
 		} catch (SQLException e) {
-			throw new IUserDAO.DALException(e.getMessage());
+			throw new IIngredientDAO.DALException(e.getMessage());
 		}
-		return userList;
+		return ingredientList;
 	}
 
 
 	@Override
-	public void updateUser(IUserDTO user) throws IUserDAO.DALException {
+	public void updateIngredient(IIngredientDTO ingredient) throws IIngredientDAO.DALException {
 
 		try {
 			Connection c = createConnection();
-			PreparedStatement st = c.prepareStatement("UPDATE userlist SET userName = ?, ini = ? WHERE userID = ?");
-			PreparedStatement psd = c.prepareStatement("DELETE FROM roles WHERE userID = ?");
-			PreparedStatement pst;
-			int userId = user.getUserId();
-			String userName = user.getUserName();
-			String ini = user.getIni();
-			List<String> roles = user.getRoles();
+			PreparedStatement st = c.prepareStatement("UPDATE ingredienser SET ingrediens_navn = ?, afvigelse = ?, isAktiv = ? WHERE userID = ?");
+			int ingredientId = ingredient.getIngredientId();
+			String ingredientName = ingredient.getIngredientName();
+			boolean active = ingredient.getActive();
+			double margin = ingredient.getMargin();
 
-			psd.setInt(1,userId);
-			psd.executeUpdate();
-
-			st.setString(1,userName);
-			st.setString(2,ini);
-			st.setInt(3,userId);
+			st.setString(1,ingredientName);
+			st.setDouble(2,margin);
+			st.setBoolean(3, active);
+			st.setInt(4,ingredientId);
 			st.executeUpdate();
-
-			for (String roles1 : roles) {
-				pst = c.prepareStatement("INSERT INTO roles VALUES (?,?)");
-				pst.setString(1, roles1);
-				pst.setInt(2, userId);
-				pst.executeUpdate();
-			}
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IUserDAO.DALException(e.getMessage());
+			throw new IIngredientDAO.DALException(e.getMessage());
 		}
 	}
 }

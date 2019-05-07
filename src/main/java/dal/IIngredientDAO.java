@@ -6,12 +6,14 @@ import java.util.List;
 
 public interface IIngredientDAO {
 	//Create
-	void createIngredient(IIngredientDTO user) throws IIngredientDAO.DALException;
+	void createIngredient(IIngredientDTO ingredient) throws DALException;
+
 	//Read
-	IIngredientDTO getIngredient(int userId) throws IIngredientDAO.DALException;
-	List<IIngredientDTO> getIngredientList() throws IIngredientDAO.DALException;
+	IIngredientDTO getIngredient(int ingredientId) throws DALException;
+	List<IIngredientDTO> getIngredientList() throws DALException;
+
 	//Update
-	void updateIngredient(IIngredientDTO user) throws IIngredientDAO.DALException;
+	void updateIngredient(IIngredientDTO ingredient) throws DALException;
 
 	public class DALException extends Exception {
 		//Til Java serialisering...
