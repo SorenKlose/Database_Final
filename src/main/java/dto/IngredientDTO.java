@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class IngredientDTO implements Serializable, IIngredientDTO {
 	private int ingredientId;
 	private String ingredientName;
-	private String margin;
+	private double margin;
 	private boolean active;
 	@Override
 	public int getIngredientId(){
@@ -24,11 +24,11 @@ public class IngredientDTO implements Serializable, IIngredientDTO {
 		this.ingredientName = ingredientName;
 	}
 	@Override
-	public String getMargin() {
+	public double getMargin() {
 		return margin;
 	}
 	@Override
-	public void setMargin(String margin) {
+	public void setMargin(double margin) {
 		this.margin = margin;
 	}
 	@Override

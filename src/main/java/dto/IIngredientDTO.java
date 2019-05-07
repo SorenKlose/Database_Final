@@ -9,9 +9,9 @@ public interface IIngredientDTO {
 
 	void setIngredientName(String userName);
 
-	String getMargin();
+	double getMargin();
 
-	void setMargin(String margin);
+	void setMargin(double margin);
 
 	boolean getActive();
 
