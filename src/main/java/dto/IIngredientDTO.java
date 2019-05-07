@@ -11,7 +11,9 @@ public interface IIngredientDTO {
 
 	String getMargin();
 
-	void setMargin();
+	void setMargin(String margin);
 
-	boolean active();
+	boolean getActive();
+
+	void setActive(boolean active);
 }
