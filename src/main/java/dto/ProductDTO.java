@@ -1,7 +1,6 @@
 package dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDTO implements Serializable, IProductDTO {
@@ -13,7 +12,6 @@ public class ProductDTO implements Serializable, IProductDTO {
     public List<String> getProductList() {
         return productList;
     }
-
 
     @Override
     public int getProductId() {

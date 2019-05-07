@@ -14,13 +14,13 @@ public class ProductDAO implements IProductDAO{
                 + "user=s185086&password=PL9404AoCEaBAFfUjd9dG");
     }
     @Override
-    public void createProduct (IProductDTO product) throws IUserDAO.DALException {
+    public void createProduct (IProductDTO product) throws DALException   {
         try{
             Connection c = createConnection();
             Statement statement = c.createStatement();
             ResultSet rs = statement.executeQuery("SELECT produkt_id FROM Produkter");
             LinkedList<Integer> uid = new LinkedList<>();
-            boolean isUsed = false;
+            boolean idUsed = false;
 
             while (rs.next()) {
                 uid.add(rs.getInt("produkt_id"));
@@ -37,14 +37,40 @@ public class ProductDAO implements IProductDAO{
                     break;
                 }
             }
-            if (idUsed == falde) {
+            if (idUsed == false) {
               st.setInt(1,productId);
               st.setString(2, productName);
               st.executeUpdate();
-              for (String productList : product.getProductList()) {
-                  ps = c.prepareStatement("INSERT INTO roles VALUES (?,?)\"")
               }
-            }
+              c.close();
+        } catch (SQLException e) {
+            throw new IProductDAO.DALException(e.getMessage());
         }
+    }
+    @Override
+    public IProductDTO getProduct(int productId) throws DALException {
+
+        IProductDTO product = new ProductDTO();
+
+        try {
+            Connection c = createConnection();
+
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Produkter WHERE produkt_id = " + productId);
+            rs.next();
+
+            product.setProductId(rs.getInt("produkt_id"));
+            product.setProductName(rs.getString("produkt_navn"));
+
+            rs = st.executeQuery("SELECT produkt_navn FROM Produket WHERE produkt_id = " + productId);
+            while(rs.next()){
+                user.getRoles().add(rs.getString(1));
+            }
+
+            c.close();
+        } catch (SQLException e) {
+            throw new IProductDAO.DALException(e.getMessage());
+        }
+        return product;
     }
 }

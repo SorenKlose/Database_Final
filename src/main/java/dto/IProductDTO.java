@@ -9,7 +9,7 @@ public interface IProductDTO {
 
     String getProductName();
 
-    void setProductName();
+    void setProductName(String productName);
 
     List<String> getProductList();
 
