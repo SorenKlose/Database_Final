@@ -26,14 +26,6 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 		this.productId = productId;
 	}
 	@Override
-	public int getUserId() {
-		return userId;
-	}
-	@Override
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-	@Override
 	public String getDate() {
 		return date;
 	}

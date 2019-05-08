@@ -11,10 +11,6 @@ public interface IRecipeDTO {
 
 	void setProductId(int productId);
 
-	int getUserId();
-
-	void setUserId(int userId);
-
 	String getDate();
 
 	void setDate(String date);

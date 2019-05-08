@@ -1,8 +1,6 @@
 package dal;
 
-import dto.IIngredientDTO;
 import dto.IRecipeDTO;
-
 import java.util.List;
 
 public interface IRecipeDAO {

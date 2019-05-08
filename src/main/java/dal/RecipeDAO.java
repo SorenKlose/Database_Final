@@ -117,7 +117,6 @@ public class RecipeDAO implements IRecipeDAO{
 			PreparedStatement st = c.prepareStatement("UPDATE opskrifter SET produkt_id = ?, dato = ? WHERE opskrift_id = ?");
 			int recipeId = recipe.getRecipeId();
 			int productId = recipe.getProductId();
-			int userId = recipe.getUserId();
 			String date = recipe.getDate();
 
 			st.setInt(1,productId);
