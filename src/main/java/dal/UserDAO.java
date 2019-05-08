@@ -112,7 +112,7 @@ public class UserDAO implements IUserDAO {
 		try (Connection c = createConnection()){
 
 			Statement st = c.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM userlist");
+			ResultSet rs = st.executeQuery("SELECT * FROM Brugere");
 
 			while (rs.next())
 			{
@@ -137,7 +137,7 @@ public class UserDAO implements IUserDAO {
 	public void updateUser(IUserDTO user) throws DALException {
 
 		try (Connection c = createConnection()){
-			PreparedStatement st = c.prepareStatement("UPDATE userlist SET userName = ?, isAdministrator = ?, isLaborant = ?, isProduktionsleder = ?, isFarmaceut = ? WHERE userID = ?");
+			PreparedStatement st = c.prepareStatement("UPDATE Brugere SET bruger_navn = ?, isAdministrator = ?, isLaborant = ?, isProduktionsleder = ?, isFarmaceut = ? WHERE bruger_id = ?");
 			Statement str = c.createStatement();
 			ResultSet rs;
 
