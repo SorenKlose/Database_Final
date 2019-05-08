@@ -1,18 +1,18 @@
 package dal;
 
-import dto.IUserDTO;
+import dto.IMaterialDTO;
 
 import java.util.List;
 
-public interface IUserDAO {
-	//Create
-	void createUser(IUserDTO user) throws DALException;
+public interface IMaterialDAO {
+	//
+	void createMaterial(IMaterialDTO material) throws DALException;
 	//Read
-	IUserDTO getUser(int userId) throws DALException;
+	IMaterialDTO getMaterial(int materialId) throws DALException;
 
-	List<IUserDTO> getUserList() throws DALException;
+	List<IMaterialDTO> getMaterialList() throws DALException;
 	//Update
-	void updateUser(IUserDTO user) throws DALException;
+	void updateMaterial(IMaterialDTO material) throws DALException;
 
 	public class DALException extends Exception {
 		//Til Java serialisering...
@@ -27,5 +27,4 @@ public interface IUserDAO {
 		}
 
 	}
-
 }
