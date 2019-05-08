@@ -14,4 +14,6 @@ public interface IRecipeDTO {
 	String getDate();
 
 	void setDate(String date);
+
+	List<Integer> getPharmaList();
 }

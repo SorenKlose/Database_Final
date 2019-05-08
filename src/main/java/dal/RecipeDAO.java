@@ -21,32 +21,43 @@ public class RecipeDAO implements IRecipeDAO{
 		try {
 			Connection c = createConnection();
 			Statement statement = c.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT opskrift_id FROM Opskrifter");
-			LinkedList<Integer> uid = new LinkedList<>();
-			boolean idUsed = false;
+			ResultSet rs = statement.executeQuery("SELECT opskrift_id FROM Opskrifter WHERE opskrift_id = " + recipe.getRecipeId());
+			Statement proState = c.createStatement();
+			ResultSet proSet = proState.executeQuery("SELECT produkt_id FROM Produkter WHERE produkt_id = " + recipe.getProductId());
 
-			while (rs.next()){
-				uid.add(rs.getInt("opskrift_id"));
+
+			if(rs.next()){
+				throw new DALException("recipeID already in use");
 			}
 
-			PreparedStatement st = c.prepareStatement("INSERT INTO Opskrifter VALUES (?,?,?)");
-			int recipeId = recipe.getRecipeId();
-			int productId = recipe.getProductId();
-			String date = recipe.getDate();
+			if(!proSet.next()){
+				throw new DALException("Product does not exist");
+			}
 
-			for (int i = 0; i < uid.size(); i++){
-				if (recipeId == uid.get(i)){
-					System.out.println("recipeID already in use");
-					idUsed = true;
-					break;
+			Statement PharmaCheck = c.createStatement();
+			ResultSet pharmaCheck;
+			for(int check: recipe.getPharmaList()){
+				pharmaCheck = PharmaCheck.executeQuery("SELECT bruger_id FROM Farmaceuter WHERE bruger_id = " + check);
+				if(!pharmaCheck.next()){
+					throw new DALException("One of the Pharmaceuts does not exist, or is not a Pharmaceut");
 				}
 			}
 
-			if (idUsed == false) {
-				st.setInt(1, recipeId);
-				st.setInt(2, productId);
-				st.setString(3, date);
-				st.executeUpdate();
+
+
+			PreparedStatement st = c.prepareStatement("INSERT INTO Opskrifter VALUES (?,?,?)");
+
+			st.setInt(1, recipe.getRecipeId());
+			st.setInt(2, recipe.getProductId());
+			st.setString(3, recipe.getDate());
+			st.executeUpdate();
+
+			PreparedStatement ps;
+			for (int pharma: recipe.getPharmaList()){
+				ps = c.prepareStatement("INSERT INTO Farmaceuter_Opskrifter VALUES (?)");
+				ps.setInt(1, pharma);
+				ps.executeUpdate();
+				ps.close();
 			}
 
 			c.close();

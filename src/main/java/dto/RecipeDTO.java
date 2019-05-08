@@ -1,13 +1,14 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class RecipeDTO implements Serializable, IRecipeDTO {
 
-	int recipeId;
-	int productId;
-	int userId;
-	String date;
+	private int recipeId;
+	private int productId;
+	private String date;
+	private List<Integer> pharmaList;
 
 	@Override
 	public int getRecipeId() {
@@ -32,5 +33,9 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 	@Override
 	public void setDate(String date) {
 		this.date = date;
+	}
+	@Override
+	public List<Integer> getPharmaList(){
+		return pharmaList;
 	}
 }
