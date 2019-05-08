@@ -26,13 +26,12 @@ public class RecipeDAO implements IRecipeDAO{
 			boolean idUsed = false;
 
 			while (rs.next()){
-				uid.add(rs.getInt("ingrediens_id"));
+				uid.add(rs.getInt("opskrift_id"));
 			}
 
-			PreparedStatement st = c.prepareStatement("INSERT INTO Opskrifter VALUES (?,?,?,?)");
+			PreparedStatement st = c.prepareStatement("INSERT INTO Opskrifter VALUES (?,?,?)");
 			int recipeId = recipe.getRecipeId();
 			int productId = recipe.getProductId();
-			int userId = recipe.getUserId();
 			String date = recipe.getDate();
 
 			for (int i = 0; i < uid.size(); i++){
@@ -46,8 +45,7 @@ public class RecipeDAO implements IRecipeDAO{
 			if (idUsed == false) {
 				st.setInt(1, recipeId);
 				st.setInt(2, productId);
-				st.setInt(3, userId);
-				st.setString(4, date);
+				st.setString(3, date);
 				st.executeUpdate();
 			}
 
@@ -73,7 +71,6 @@ public class RecipeDAO implements IRecipeDAO{
 
 			recipe.setRecipeId(rs.getInt("opskrift_id"));
 			recipe.setProductId(rs.getInt("produkt_id"));
-			recipe.setUserId(rs.getInt("bruger_id"));
 			recipe.setDate(rs.getString("dato"));
 
 			c.close();
@@ -99,7 +96,6 @@ public class RecipeDAO implements IRecipeDAO{
 			{
 				recipe.setRecipeId(rs.getInt("opskrift_id"));
 				recipe.setProductId(rs.getInt("produkt_id"));
-				recipe.setUserId(rs.getInt("bruger_id"));
 				recipe.setDate(rs.getString("dato"));
 
 				recipeList.add(recipe);
@@ -118,16 +114,15 @@ public class RecipeDAO implements IRecipeDAO{
 
 		try {
 			Connection c = createConnection();
-			PreparedStatement st = c.prepareStatement("UPDATE opskrifter SET produkt_id = ?, bruger_id = ?, dato = ? WHERE opskrift_id = ?");
+			PreparedStatement st = c.prepareStatement("UPDATE opskrifter SET produkt_id = ?, dato = ? WHERE opskrift_id = ?");
 			int recipeId = recipe.getRecipeId();
 			int productId = recipe.getProductId();
 			int userId = recipe.getUserId();
 			String date = recipe.getDate();
 
 			st.setInt(1,productId);
-			st.setInt(2,userId);
-			st.setString(3, date);
-			st.setInt(4,recipeId);
+			st.setString(2, date);
+			st.setInt(3,recipeId);
 			st.executeUpdate();
 
 			c.close();
