@@ -73,7 +73,6 @@ public class RecipeDAO implements IRecipeDAO{
 				ps.setDouble(3, recipe.getAmount().get(i));
 			}
 
-			c.close();
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}
