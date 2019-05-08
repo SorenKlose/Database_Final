@@ -1,5 +1,6 @@
 package dto;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface IRecipeDTO {
@@ -15,9 +16,9 @@ public interface IRecipeDTO {
 
 	void setAmount(double amount);
 
-	String getDate();
+	Date getDate();
 
-	void setDate(String date);
+	void setDate(Date date);
 
 	List<Integer> getPharmaList();
 

@@ -1,6 +1,7 @@
 package dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 
 public class RecipeDTO implements Serializable, IRecipeDTO {
@@ -8,7 +9,7 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 	private int recipeId;
 	private int productId;
 	private double amount;
-	private String date;
+	private Date date;
 	private List<Integer> pharmaList;
 	private List<Integer> ingList;
 
@@ -37,11 +38,11 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 		this.amount = amount;
 	}
 	@Override
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 	@Override
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	@Override

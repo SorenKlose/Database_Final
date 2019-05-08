@@ -56,7 +56,7 @@ public class RecipeDAO implements IRecipeDAO{
 
 			st.setInt(1, recipe.getRecipeId());
 			st.setInt(2, recipe.getProductId());
-			st.setString(3, recipe.getDate());
+			st.setDate(3, recipe.getDate());
 			st.executeUpdate();
 
 			PreparedStatement ps;
@@ -96,7 +96,7 @@ public class RecipeDAO implements IRecipeDAO{
 
 			recipe.setRecipeId(rs.getInt("opskrift_id"));
 			recipe.setProductId(rs.getInt("produkt_id"));
-			recipe.setDate(rs.getString("dato"));
+			recipe.setDate(rs.getDate("dato"));
 
 			c.close();
 		} catch (SQLException e) {
@@ -121,7 +121,7 @@ public class RecipeDAO implements IRecipeDAO{
 			{
 				recipe.setRecipeId(rs.getInt("opskrift_id"));
 				recipe.setProductId(rs.getInt("produkt_id"));
-				recipe.setDate(rs.getString("dato"));
+				recipe.setDate(rs.getDate("dato"));
 
 				recipeList.add(recipe);
 			}
@@ -142,10 +142,10 @@ public class RecipeDAO implements IRecipeDAO{
 			PreparedStatement st = c.prepareStatement("UPDATE opskrifter SET produkt_id = ?, dato = ? WHERE opskrift_id = ?");
 			int recipeId = recipe.getRecipeId();
 			int productId = recipe.getProductId();
-			String date = recipe.getDate();
+			Date date = recipe.getDate();
 
 			st.setInt(1,productId);
-			st.setString(2, date);
+			st.setDate(2, date);
 			st.setInt(3,recipeId);
 			st.executeUpdate();
 
