@@ -43,7 +43,14 @@ public class RecipeDAO implements IRecipeDAO{
 				}
 			}
 
-
+			Statement IngCheck = c.createStatement();
+			ResultSet ingCheck;
+			for(int check: recipe.getIngList()){
+				ingCheck = IngCheck.executeQuery("SELECT ingrediens_id FROM Ingredienser WHERE ingrediens_id = " + check);
+				if(!ingCheck.next()){
+					throw new DALException("Ingredient doesn't exist");
+				}
+			}
 
 			PreparedStatement st = c.prepareStatement("INSERT INTO Opskrifter VALUES (?,?,?)");
 
@@ -53,11 +60,18 @@ public class RecipeDAO implements IRecipeDAO{
 			st.executeUpdate();
 
 			PreparedStatement ps;
-			for (int pharma: recipe.getPharmaList()){
-				ps = c.prepareStatement("INSERT INTO Farmaceuter_Opskrifter VALUES (?)");
+			for(int pharma: recipe.getPharmaList()){
+				ps = c.prepareStatement("INSERT INTO Farmaceuter_Opskrifter VALUES (?,?)");
 				ps.setInt(1, pharma);
+				ps.setInt(2, recipe.getRecipeId());
 				ps.executeUpdate();
-				ps.close();
+			}
+
+			for(int ing: recipe.getIngList()){
+				ps = c.prepareStatement("INSERT INTO Opskrift_Ingrediens VALUES (?,?,?)");
+				ps.setInt(1, recipe.getRecipeId());
+				ps.setInt(2, ing);
+				ps.setDouble(3, recipe.getAmount());
 			}
 
 			c.close();

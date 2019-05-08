@@ -11,9 +11,15 @@ public interface IRecipeDTO {
 
 	void setProductId(int productId);
 
+	double getAmount();
+
+	void setAmount(double amount);
+
 	String getDate();
 
 	void setDate(String date);
 
 	List<Integer> getPharmaList();
+
+	List<Integer> getIngList();
 }
