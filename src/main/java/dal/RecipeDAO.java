@@ -17,8 +17,8 @@ public class RecipeDAO implements IRecipeDAO{
 	@Override
 	public void createRecipe(IRecipeDTO recipe) throws IRecipeDAO.DALException {
 
-		try {
-			Connection c = createConnection();
+		try (Connection c = createConnection()){
+
 			Statement statement = c.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT opskrift_id FROM Opskrifter WHERE opskrift_id = " + recipe.getRecipeId());
 			Statement proState = c.createStatement();
@@ -66,11 +66,11 @@ public class RecipeDAO implements IRecipeDAO{
 				ps.executeUpdate();
 			}
 
-			for(int ing: recipe.getIngList()){
+			for(int i = 0; i < recipe.getIngList().size(); i++){
 				ps = c.prepareStatement("INSERT INTO Opskrift_Ingrediens VALUES (?,?,?)");
 				ps.setInt(1, recipe.getRecipeId());
-				ps.setInt(2, ing);
-				ps.setDouble(3, recipe.getAmount());
+				ps.setInt(2, recipe.getIngList().get(i));
+				ps.setDouble(3, recipe.getAmount().get(i));
 			}
 
 			c.close();
@@ -86,8 +86,8 @@ public class RecipeDAO implements IRecipeDAO{
 		IRecipeDTO recipe = new RecipeDTO();
 
 
-		try {
-			Connection c = createConnection();
+		try (Connection c = createConnection()){
+
 
 			Statement st = c.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM Opskrifter WHERE opskrift_id = " + recipeId);
@@ -97,7 +97,23 @@ public class RecipeDAO implements IRecipeDAO{
 			recipe.setProductId(rs.getInt("produkt_id"));
 			recipe.setDate(rs.getDate("dato"));
 
-			c.close();
+			rs = st.executeQuery("SELECT * FROM Opskrift_Ingrediens WHERE opskrift_id = "+ recipeId);
+			List<Integer> ingList = new ArrayList<>();
+			List<Double> amountList = new ArrayList<>();
+			while (rs.next()){
+				ingList.add(rs.getInt("ingrediens_id"));
+				amountList.add(rs.getDouble("mængde"));
+			}
+			recipe.setIngList(ingList);
+			recipe.setAmount(amountList);
+
+			rs = st.executeQuery("SELECT * FROM Farmaceuter_Opskrifter WHERE opskrift_id = "+ recipeId);
+			List<Integer> pharmaList = new ArrayList<>();
+			while (rs.next()){
+				pharmaList.add(rs.getInt("bruger_id"));
+			}
+			recipe.setPharmaList(pharmaList);
+
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}
@@ -111,21 +127,40 @@ public class RecipeDAO implements IRecipeDAO{
 		IRecipeDTO recipe = new RecipeDTO();
 		List<IRecipeDTO> recipeList = new ArrayList<>();
 
-		try {
-			Connection c = createConnection();
+		try (Connection c = createConnection()){
+			Statement str = c.createStatement();
 			Statement st = c.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM Ingredienser");
-
+			List<Integer> ingList;
+			List<Double> amountList;
+			List<Integer> pharmaList;
 			while (rs.next())
 			{
 				recipe.setRecipeId(rs.getInt("opskrift_id"));
 				recipe.setProductId(rs.getInt("produkt_id"));
 				recipe.setDate(rs.getDate("dato"));
 
+				rs = str.executeQuery("SELECT * FROM Opskrift_Ingrediens WHERE opskrift_id = "+ recipe.getRecipeId());
+				ingList = new ArrayList<>();
+				amountList = new ArrayList<>();
+				while (rs.next()){
+					ingList.add(rs.getInt("ingrediens_id"));
+					amountList.add(rs.getDouble("mængde"));
+				}
+				recipe.setIngList(ingList);
+				recipe.setAmount(amountList);
+
+				rs = str.executeQuery("SELECT * FROM Farmaceuter_Opskrifter WHERE opskrift_id = "+ recipe.getRecipeId());
+				pharmaList = new ArrayList<>();
+				while (rs.next()){
+					pharmaList.add(rs.getInt("bruger_id"));
+				}
+				recipe.setPharmaList(pharmaList);
+
+
 				recipeList.add(recipe);
 			}
 
-			c.close();
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}

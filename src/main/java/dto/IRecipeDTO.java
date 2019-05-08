@@ -12,9 +12,9 @@ public interface IRecipeDTO {
 
 	void setProductId(int productId);
 
-	double getAmount();
+	List<Double> getAmount();
 
-	void setAmount(double amount);
+	void setAmount(List<Double> amount);
 
 	Date getDate();
 
@@ -22,5 +22,9 @@ public interface IRecipeDTO {
 
 	List<Integer> getPharmaList();
 
+	void setPharmaList(List<Integer> pharmaList);
+
 	List<Integer> getIngList();
+
+	void setIngList(List<Integer> ingList);
 }

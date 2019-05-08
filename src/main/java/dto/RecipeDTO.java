@@ -8,7 +8,7 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 
 	private int recipeId;
 	private int productId;
-	private double amount;
+	private List<Double> amount;
 	private Date date;
 	private List<Integer> pharmaList;
 	private List<Integer> ingList;
@@ -30,11 +30,11 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 		this.productId = productId;
 	}
 	@Override
-	public double getAmount(){
+	public List<Double> getAmount(){
 		return amount;
 	}
 	@Override
-	public void setAmount(double amount){
+	public void setAmount(List<Double> amount){
 		this.amount = amount;
 	}
 	@Override
@@ -50,7 +50,15 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 		return pharmaList;
 	}
 	@Override
+	public void setPharmaList(List<Integer> pharmaList) {
+		this.pharmaList = pharmaList;
+	}
+	@Override
 	public List<Integer> getIngList(){
 		return ingList;
+	}
+	@Override
+	public void setIngList(List<Integer> ingList) {
+		this.ingList = ingList;
 	}
 }
