@@ -22,54 +22,44 @@ public class UserDAO implements IUserDAO {
 
 		try (Connection c = createConnection()){
 			Statement statement = c.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT bruger_id FROM Brugere");
+			ResultSet rs = statement.executeQuery("SELECT * FROM Brugere WHERE bruger_id = " + user.getUserId());
 			LinkedList<Integer> uid = new LinkedList<>();
 			boolean idUsed = false;
 
-			while (rs.next()){
-				uid.add(rs.getInt("userID"));
+			if(rs.next()){
+				throw  new DALException("ID already in use");
 			}
 
 			PreparedStatement st = c.prepareStatement("INSERT INTO Brugere VALUES (?,?,?,?,?,?)");
 			PreparedStatement ps;
 
 
-			for (int i = 0; i < uid.size(); i++){
-				if (user.getUserId() == uid.get(i)){
-					System.out.println("userID already in use");
-					idUsed = true;
-					break;
-				}
+			st.setInt(1, user.getUserId());
+			st.setString(2, user.getUserName());
+			st.setBoolean(3, user.isAdmin());
+			st.setBoolean(4, user.isLabo());
+			st.setBoolean(5, user.isPLeader());
+			st.setBoolean(6, user.isPharma());
+			st.executeUpdate();
+			if (user.isAdmin()){
+				ps = c.prepareStatement("INSERT  INTO Administratorer VALUES (?)");
+				ps.setInt(1, user.getUserId());
+				ps.executeUpdate();
 			}
-
-			if (idUsed == false) {
-				st.setInt(1, user.getUserId());
-				st.setString(2, user.getUserName());
-				st.setBoolean(3, user.isAdmin());
-				st.setBoolean(4, user.isLabo());
-				st.setBoolean(5, user.isPLeader());
-				st.setBoolean(6, user.isPharma());
-				st.executeUpdate();
-				if (user.isAdmin()){
-					ps = c.prepareStatement("INSERT  INTO Administratorer VALUES (?)");
-					ps.setInt(1, user.getUserId());
-					ps.executeUpdate();
-				}
-				if (user.isLabo()){
-					ps = c.prepareStatement("INSERT  INTO Laboranter VALUES (?)");
-					ps.setInt(1, user.getUserId());
-					ps.executeUpdate();
-				}
-				if (user.isPLeader()){
-					ps = c.prepareStatement("INSERT  INTO Produktionsledere VALUES (?)");
-					ps.setInt(1, user.getUserId());
-					ps.executeUpdate();
-				}
-				if (user.isPharma()){
-					ps = c.prepareStatement("INSERT  INTO Farmaceuter VALUES (?)");
-					ps.setInt(1, user.getUserId());
-					ps.executeUpdate();
-				}
+			if (user.isLabo()){
+				ps = c.prepareStatement("INSERT  INTO Laboranter VALUES (?)");
+				ps.setInt(1, user.getUserId());
+				ps.executeUpdate();
+			}
+			if (user.isPLeader()){
+				ps = c.prepareStatement("INSERT  INTO Produktionsledere VALUES (?)");
+				ps.setInt(1, user.getUserId());
+				ps.executeUpdate();
+			}
+			if (user.isPharma()){
+				ps = c.prepareStatement("INSERT  INTO Farmaceuter VALUES (?)");
+				ps.setInt(1, user.getUserId());
+				ps.executeUpdate();
 			}
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
