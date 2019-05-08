@@ -23,7 +23,7 @@ public class UserDAO implements IUserDAO {
 		try {
 			Connection c = createConnection();
 			Statement statement = c.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT userID FROM userlist");
+			ResultSet rs = statement.executeQuery("SELECT bruger_id FROM Brugere");
 			LinkedList<Integer> uid = new LinkedList<>();
 			boolean idUsed = false;
 
@@ -31,7 +31,7 @@ public class UserDAO implements IUserDAO {
 				uid.add(rs.getInt("userID"));
 			}
 
-			PreparedStatement st = c.prepareStatement("INSERT INTO userlist VALUES (?,?,?)");
+			PreparedStatement st = c.prepareStatement("INSERT INTO Brugere VALUES (?,?,?)");
 			PreparedStatement ps;
 			int userId = user.getUserId();
 			String userName = user.getUserName();

@@ -11,15 +11,21 @@ public interface IUserDTO {
 
 	void setUserName(String userName);
 
-	String getIni();
+	void setAdmin(boolean admin);
 
-	void setIni(String ini);
+	boolean isAdmin();
 
-	List<String> getRoles();
+	void setLabo(boolean labo);
 
-	void setRoles(List<String> roles);
+	boolean isLabo();
 
-	void addRole(String role);
+	void setPLeader(boolean pLeader);
 
-	boolean removeRole(String role);
+	boolean isPLeader();
+
+	void setPharma(boolean pharma);
+
+	boolean isPharma();
+
+
 }

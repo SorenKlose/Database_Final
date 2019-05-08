@@ -11,11 +11,12 @@ public class UserDTO implements Serializable, IUserDTO {
 	//Fields
 	private int	userId;
 	private String userName;
-	private String ini;
-	private List<String> roles;
+	private boolean isAdmin;
+	private boolean isPharma;
+	private boolean isPLeader;
+	private boolean isLabo;
 	//Constructor
 	public UserDTO() {
-		this.roles = new ArrayList<>();
 	}
 	//Getters and Setters
 	@Override
@@ -35,39 +36,35 @@ public class UserDTO implements Serializable, IUserDTO {
 		this.userName = userName;
 	}
 	@Override
-	public String getIni() {
-		return ini;
+	public boolean isAdmin() {
+		return isAdmin;
 	}
 	@Override
-	public void setIni(String ini) {
-		this.ini = ini;
-	}
-
-	@Override
-	public List<String> getRoles() {
-		return roles;
+	public void setAdmin(boolean admin) {
+		isAdmin = admin;
 	}
 	@Override
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
+	public boolean isPharma() {
+		return isPharma;
 	}
-
 	@Override
-	public void addRole(String role){
-		this.roles.add(role);
+	public void setPharma(boolean pharma) {
+		isPharma = pharma;
 	}
-	/**
-	 *
-	 * @param role
-	 * @return true if role existed, false if not
-	 */
 	@Override
-	public boolean removeRole(String role){
-		return this.roles.remove(role);
+	public boolean isPLeader() {
+		return isPLeader;
 	}
-
 	@Override
-	public String toString() {
-		return "UserDTO [userId=" + userId + ", userName=" + userName + ", ini=" + ini + ", roles=" + roles + "]";
+	public void setPLeader(boolean PLeader) {
+		isPLeader = PLeader;
+	}
+	@Override
+	public boolean isLabo() {
+		return isLabo;
+	}
+	@Override
+	public void setLabo(boolean labo) {
+		isLabo = labo;
 	}
 }
