@@ -9,6 +9,7 @@ public interface IUserDAO {
 	void createUser(IUserDTO user) throws DALException;
 	//Read
 	IUserDTO getUser(int userId) throws DALException;
+
 	List<IUserDTO> getUserList() throws DALException;
 	//Update
 	void updateUser(IUserDTO user) throws DALException;
