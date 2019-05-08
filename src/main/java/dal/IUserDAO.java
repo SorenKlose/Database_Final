@@ -4,7 +4,7 @@ import dto.IUserDTO;
 
 import java.util.List;
 
-public interface IUserDAO {
+public interface IUserDAO extends IDALException{
 	//Create
 	void createUser(IUserDTO user) throws DALException;
 	//Read
@@ -13,19 +13,5 @@ public interface IUserDAO {
 	List<IUserDTO> getUserList() throws DALException;
 	//Update
 	void updateUser(IUserDTO user) throws DALException;
-
-	public class DALException extends Exception {
-		//Til Java serialisering...
-		private static final long serialVersionUID = 7355418246336739229L;
-
-		public DALException(String msg, Throwable e) {
-			super(msg,e);
-		}
-
-		public DALException(String msg) {
-			super(msg);
-		}
-
-	}
 
 }
