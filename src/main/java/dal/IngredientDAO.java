@@ -18,43 +18,26 @@ public class IngredientDAO implements IIngredientDAO {
 	@Override
 	public void createIngredient(IIngredientDTO ingredient) throws IIngredientDAO.DALException {
 
-		try {
-			Connection c = createConnection();
-			Statement statement = c.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT ingrediens_id FROM Ingredienser");
-			LinkedList<Integer> uid = new LinkedList<>();
-			boolean idUsed = false;
+		try (Connection c = createConnection()) {
 
-			while (rs.next()){
-				uid.add(rs.getInt("ingrediens_id"));
+			Statement statement = c.createStatement();
+			LinkedList<Integer> uid = new LinkedList<>();
+
+			ResultSet rs = statement.executeQuery("SELECT * FROM Ingredienser WHERE ingrediens_id = " + ingredient.getIngredientId());
+			if (rs.next()){
+				throw new DALException("ID already in use");
 			}
 
 			PreparedStatement st = c.prepareStatement("INSERT INTO Ingredienser VALUES (?,?,?,?)");
-			PreparedStatement ps;
-			int ingredientId = ingredient.getIngredientId();
-			String ingredientName = ingredient.getIngredientName();
-			boolean active = ingredient.getActive();
-			double margin = ingredient.getMargin();
 
-			for (int i = 0; i < uid.size(); i++){
-				if (ingredientId == uid.get(i)){
-					System.out.println("ingredientID already in use");
-					idUsed = true;
-					break;
-				}
-			}
+			st.setInt(1, ingredient.getIngredientId());
+			st.setString(2, ingredient.getIngredientName());
+			st.setBoolean(3,  ingredient.getActive());
+			st.setDouble(4, ingredient.getMargin());
+			st.executeUpdate();
 
-			if (idUsed == false) {
-				st.setInt(1, ingredientId);
-				st.setString(2, ingredientName);
-				st.setBoolean(3, active);
-				st.setDouble(4, margin);
-				st.executeUpdate();
-			}
-
-			c.close();
 		} catch (SQLException e) {
-			throw new IIngredientDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 	}
 
@@ -65,8 +48,8 @@ public class IngredientDAO implements IIngredientDAO {
 		IIngredientDTO ingrediens = new IngredientDTO();
 
 
-		try {
-			Connection c = createConnection();
+		try (Connection c = createConnection()) {
+
 
 			Statement st = c.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM Ingredienser WHERE ingrediens_id = " + ingredientId);
@@ -77,7 +60,6 @@ public class IngredientDAO implements IIngredientDAO {
 			ingrediens.setMargin(rs.getDouble("afvigelse"));
 			ingrediens.setActive(rs.getBoolean("isAktiv"));
 
-			c.close();
 		} catch (SQLException e) {
 			throw new IIngredientDAO.DALException(e.getMessage());
 		}
@@ -88,37 +70,37 @@ public class IngredientDAO implements IIngredientDAO {
 	@Override
 	public List<IIngredientDTO> getIngredientList() throws IIngredientDAO.DALException {
 
-		IIngredientDTO user = new IngredientDTO();
+		IIngredientDTO ingredient = new IngredientDTO();
 		List<IIngredientDTO> ingredientList = new ArrayList<>();
 
-		try {
-			Connection c = createConnection();
+		try (Connection c = createConnection()){
+
 			Statement st = c.createStatement();
 			ResultSet rs = st.executeQuery("SELECT * FROM Ingredienser");
 
 			while (rs.next())
 			{
-				user.setIngredientId(rs.getInt("ingrediens_id"));
-				user.setIngredientName(rs.getString("ingrediens_navn"));
-				user.setMargin(rs.getDouble("afvigelse"));
+				ingredient.setIngredientId(rs.getInt("ingrediens_id"));
+				ingredient.setIngredientName(rs.getString("ingrediens_navn"));
+				ingredient.setActive(rs.getBoolean("isAktiv"));
+				ingredient.setMargin(rs.getDouble("afvigelse"));
 
-				ingredientList.add(user);
+				ingredientList.add(ingredient);
 			}
 
-			c.close();
 		} catch (SQLException e) {
-			throw new IIngredientDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 		return ingredientList;
 	}
 
 
 	@Override
-	public void updateIngredient(IIngredientDTO ingredient) throws IIngredientDAO.DALException {
+	public void updateIngredient(IIngredientDTO ingredient) throws DALException {
 
 		try {
 			Connection c = createConnection();
-			PreparedStatement st = c.prepareStatement("UPDATE ingredienser SET ingrediens_navn = ?, afvigelse = ?, isAktiv = ? WHERE userID = ?");
+			PreparedStatement st = c.prepareStatement("UPDATE ingredienser SET ingrediens_navn = ?, afvigelse = ?, isAktiv = ? WHERE ingrediens_id = ?");
 			int ingredientId = ingredient.getIngredientId();
 			String ingredientName = ingredient.getIngredientName();
 			boolean active = ingredient.getActive();
@@ -132,7 +114,7 @@ public class IngredientDAO implements IIngredientDAO {
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IIngredientDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 	}
 }
