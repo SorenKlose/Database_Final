@@ -11,9 +11,6 @@ public interface IRecipeDAO {
 	IRecipeDTO getRecipe(int recipeId) throws DALException;
 	List<IRecipeDTO> getRecipeList() throws DALException;
 
-	//Update
-	void updateRecipe(IRecipeDTO recipe) throws DALException;
-
 	public class DALException extends Exception {
 		//Til Java serialisering...
 		private static final long serialVersionUID = 7355418246336739229L;

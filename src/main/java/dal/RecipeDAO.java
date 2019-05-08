@@ -5,7 +5,6 @@ import dto.RecipeDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class RecipeDAO implements IRecipeDAO{
@@ -76,7 +75,7 @@ public class RecipeDAO implements IRecipeDAO{
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IRecipeDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 	}
 
@@ -100,7 +99,7 @@ public class RecipeDAO implements IRecipeDAO{
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IRecipeDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 		return recipe;
 	}
@@ -128,30 +127,8 @@ public class RecipeDAO implements IRecipeDAO{
 
 			c.close();
 		} catch (SQLException e) {
-			throw new IRecipeDAO.DALException(e.getMessage());
+			throw new DALException(e.getMessage());
 		}
 		return recipeList;
-	}
-
-
-	@Override
-	public void updateRecipe(IRecipeDTO recipe) throws IRecipeDAO.DALException {
-
-		try {
-			Connection c = createConnection();
-			PreparedStatement st = c.prepareStatement("UPDATE opskrifter SET produkt_id = ?, dato = ? WHERE opskrift_id = ?");
-			int recipeId = recipe.getRecipeId();
-			int productId = recipe.getProductId();
-			Date date = recipe.getDate();
-
-			st.setInt(1,productId);
-			st.setDate(2, date);
-			st.setInt(3,recipeId);
-			st.executeUpdate();
-
-			c.close();
-		} catch (SQLException e) {
-			throw new IRecipeDAO.DALException(e.getMessage());
-		}
 	}
 }
