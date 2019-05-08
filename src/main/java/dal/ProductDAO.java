@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ProductDAO implements IProductDAO{
     private Connection createConnection() throws SQLException {
@@ -62,15 +64,58 @@ public class ProductDAO implements IProductDAO{
             product.setProductId(rs.getInt("produkt_id"));
             product.setProductName(rs.getString("produkt_navn"));
 
-            rs = st.executeQuery("SELECT produkt_navn FROM Produket WHERE produkt_id = " + productId);
-            while(rs.next()){
-                user.getRoles().add(rs.getString(1));
-            }
 
             c.close();
         } catch (SQLException e) {
             throw new IProductDAO.DALException(e.getMessage());
         }
         return product;
+    }
+}
+
+    @Override
+    public List<IProductDTO> getProductList() throws IProductDAO.DALException {
+
+        IProductDTO product = new ProductDTO();
+        List<IProductDTO> productList = new ArrayList<>();
+
+        try {
+            Connection c = createConnection();
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Produkter");
+
+            while (rs.next())
+            {
+                product.setProductId(rs.getInt("produkt_id"));
+                product.setProductName(rs.getString("produkt_navn"));
+
+                productList.add(product);
+            }
+
+            c.close();
+        } catch (SQLException e) {
+            throw new IProductDAO.DALException(e.getMessage());
+        }
+        return productList;
+    }
+
+
+    @Override
+    public void updateProduct(IProductDTO product) throws IProductDAO.DALException {
+
+        try {
+            Connection c = createConnection();
+            PreparedStatement st = c.prepareStatement("UPDATE Produkter SET produkt_navn = ? WHERE userID = ?");
+            int productId = product.getProductId();
+            String productName = product.getProductName();
+
+            st.setInt(1,productId);
+            st.setString(2,productName);
+            st.executeUpdate();
+
+            c.close();
+        } catch (SQLException e) {
+            throw new IProductDAO.DALException(e.getMessage());
+        }
     }
 }

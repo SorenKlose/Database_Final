@@ -13,6 +13,6 @@ public interface IProductDTO {
 
     List<String> getProductList();
 
-    void setProductList(List <String> productList);
+    void setProductList(List<String> productList);
 
 }
