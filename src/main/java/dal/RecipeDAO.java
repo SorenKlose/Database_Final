@@ -71,6 +71,7 @@ public class RecipeDAO implements IRecipeDAO{
 				ps.setInt(1, recipe.getRecipeId());
 				ps.setInt(2, recipe.getIngList().get(i));
 				ps.setDouble(3, recipe.getAmount().get(i));
+				ps.executeUpdate();
 			}
 
 		} catch (SQLException e) {

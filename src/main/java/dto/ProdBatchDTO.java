@@ -60,4 +60,14 @@ public class ProdBatchDTO implements Serializable, IProdBatchDTO {
 	public void setLabList(List<Integer> labList) {
 		this.labList = labList;
 	}
+	@Override
+	public String toString(){
+//		String out = "" + prodBatchId;
+//		out +=  userId;
+//		out += recipeId;
+//		out += date.toString();
+//		out += matList.toString();
+//		out += labList.toString();
+		return "" + prodBatchId + userId + recipeId + date.toString() + matList.toString() + labList.toString();
+	}
 }

@@ -1,17 +1,11 @@
 package dto;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ProductDTO implements Serializable, IProductDTO {
     private int productId;
     private String productName;
-    private List<String> productList;
 
-    @Override
-    public List<String> getProductList() {
-        return productList;
-    }
 
     @Override
     public int getProductId() {
@@ -28,6 +22,10 @@ public class ProductDTO implements Serializable, IProductDTO {
     @Override
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+    @Override
+    public String toString(){
+        return "" + productId + productName;
     }
 }
 

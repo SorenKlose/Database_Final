@@ -37,4 +37,8 @@ public class IngredientDTO implements Serializable, IIngredientDTO {
 	}
 	@Override
 	public void setActive(boolean active){this.active = active;}
+	@Override
+	public String toString(){
+		return "" + ingredientId + ingredientName + margin + active;
+	}
 }

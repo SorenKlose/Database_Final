@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class ProductDAO implements IProductDAO{
 
     private Connection createConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185086?"
-                + "user=s185086&password=PL9404AoCEaBAFfUjd9dG");
+        return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s160068?"
+                + "user=s160068&password=D8meeg0vOUC5OjertVLZV");
     }
     @Override
     public void createProduct (IProductDTO product) throws DALException   {
@@ -22,7 +22,6 @@ public class ProductDAO implements IProductDAO{
 
             Statement statement = c.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM Produkter WHERE produkt_id = " + product.getProductId());
-            LinkedList<Integer> uid = new LinkedList<>();
 
             if (rs.next()) {
                 throw new DALException("ID already in use");

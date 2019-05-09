@@ -67,4 +67,8 @@ public class UserDTO implements Serializable, IUserDTO {
 	public void setLabo(boolean labo) {
 		isLabo = labo;
 	}
+	@Override
+	public String toString(){
+		return "" + userId + userName + isAdmin + isLabo + isPLeader + isPharma;
+	}
 }

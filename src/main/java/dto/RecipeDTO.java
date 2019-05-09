@@ -61,4 +61,8 @@ public class RecipeDTO implements Serializable, IRecipeDTO {
 	public void setIngList(List<Integer> ingList) {
 		this.ingList = ingList;
 	}
+	@Override
+	public String toString(){
+		return "" + recipeId + productId + amount.toString() + date.toString() + pharmaList.toString() + ingList.toString();
+	}
 }
