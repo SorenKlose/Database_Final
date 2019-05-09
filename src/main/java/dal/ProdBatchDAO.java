@@ -1,7 +1,6 @@
 package dal;
 
 import dto.*;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,12 +69,12 @@ public class ProdBatchDAO implements IProdBatchDAO {
 				pre.setInt(2, mat);
 				pre.executeUpdate();
 			}
-
 		}
 		catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}
 	}
+
 
 	@Override
 	public IProdBatchDTO getProdBatch(int prodBatchId) throws DALException {
@@ -95,7 +94,6 @@ public class ProdBatchDAO implements IProdBatchDAO {
 			throw new DALException(e.getMessage());
 		}
 		return prodBatch;
-
 	}
 
 
@@ -118,11 +116,9 @@ public class ProdBatchDAO implements IProdBatchDAO {
 
 				prodBatchList.add(prodBatch);
 			}
-
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}
-
 		return prodBatchList;
 	}
 }
