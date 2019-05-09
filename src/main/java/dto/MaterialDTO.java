@@ -8,7 +8,7 @@ public class MaterialDTO implements Serializable, IMaterialDTO {
 	private int materialBatchId;
 	private int ingredientId;
 	private int userId;
-	private int amount;
+	private double amount;
 	private Date date;
 	private boolean order;
 
@@ -37,11 +37,11 @@ public class MaterialDTO implements Serializable, IMaterialDTO {
 		this.userId = userId;
 	}
 	@Override
-	public int getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 	@Override
-	public void setAmount(int amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 	@Override

@@ -16,9 +16,9 @@ public interface IMaterialDTO {
 
 	void setUserId(int userId);
 
-	int getAmount();
+	double getAmount();
 
-	void setAmount(int amount);
+	void setAmount(double amount);
 
 	Date getDate();
 

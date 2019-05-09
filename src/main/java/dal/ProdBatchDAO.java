@@ -48,11 +48,29 @@ public class ProdBatchDAO implements IProdBatchDAO {
 				}
 			}
 
+			rs  = statement.executeQuery("SELECT * FROM Opskrift_Ingrediens WHERE opskrift_id = " + prodBatch.getRecipeId());
+
+			List<Integer> ingList = new ArrayList<>();
+			List<Double> amountList = new ArrayList<>();
+			while (rs.next()){
+				ingList.add(rs.getInt("ingrediens_id"));
+				amountList.add(rs.getDouble("mængde"));
+			}
+
+			for (int i = 0; i < ingList.size(); i++){
+				rs = statement.executeQuery("select t.råvare_batch_id, t.ingrediens_id, t.mængde from Råvare_Batches t inner join (select råvare_batch_id, max(dato) as MaxDate from Råvare_Batches group by råvare_batch_id ) tm on t.råvare_batch_id = tm.råvare_batch_id and t.dato = tm.MaxDate WHERE ingrediens_id = " + ingList.get(i));
+				rs.next();
+				amountList.set(i, rs.getDouble("mængde") - amountList.get(i));
+				statement.executeUpdate("UPDATE Råvare_Batches SET mængde = " + amountList.get(i) + " WHERE råvare_batch_id = " + rs.getInt("råvare_batch_id"));
+			}
+
+
 			st.setInt(1, prodBatch.getProdBatchId());
 			st.setInt(2, prodBatch.getRecipeId());
 			st.setInt(3, prodBatch.getUserId());
 			st.setDate(4, prodBatch.getDate());
 			st.executeUpdate();
+
 
 			PreparedStatement ps;
 			for(int labTech: prodBatch.getLabList()){

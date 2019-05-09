@@ -36,9 +36,9 @@ public class MaterialDAO implements IMaterialDAO {
 			st.setInt(1, material.getMaterialBatchId());
 			st.setInt(2, material.getIngredientId());
 			st.setInt(3, material.getUserId());
-			st.setInt(4, material.getAmount());
-			st.setDate(5, material.getDate());
-			st.setBoolean(6, material.getOrder());
+			st.setDate(4, material.getDate());
+			st.setBoolean(5, material.getOrder());
+			st.setDouble(6, material.getAmount());
 			st.executeUpdate();
 
 
@@ -61,7 +61,7 @@ public class MaterialDAO implements IMaterialDAO {
 			material.setMaterialBatchId(rs.getInt("råvare_batch_id"));
 			material.setIngredientId(rs.getInt("ingrediens_id"));
 			material.setUserId(rs.getInt("bruger_id"));
-			material.setAmount(rs.getInt("mængde"));
+			material.setAmount(rs.getDouble("mængde"));
 			material.setDate(rs.getDate("dato"));
 			material.setOrder(rs.getBoolean("bestil"));
 
@@ -87,7 +87,7 @@ public class MaterialDAO implements IMaterialDAO {
 				material.setMaterialBatchId(rs.getInt("råvare_batch_id"));
 				material.setIngredientId(rs.getInt("ingrediens_id"));
 				material.setUserId(rs.getInt("bruger_id"));
-				material.setAmount(rs.getInt("mængde"));
+				material.setAmount(rs.getDouble("mængde"));
 				material.setDate(rs.getDate("dato"));
 				material.setOrder(rs.getBoolean("bestil"));
 
@@ -107,7 +107,7 @@ public class MaterialDAO implements IMaterialDAO {
 
 			PreparedStatement st = c.prepareStatement("UPDATE Råvare_Batches SET mængde = ? WHERE råvare_batch_id = ?");
 
-			st.setInt(1,material.getAmount());
+			st.setDouble(1,material.getAmount());
 			st.setInt(2,material.getMaterialBatchId());
 			st.executeUpdate();
 
