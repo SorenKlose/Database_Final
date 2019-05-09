@@ -1,9 +1,10 @@
 package dal;
 
-import dto.IMaterialDTO;
-import dto.IProdBatchDTO;
+import dto.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProdBatchDAO implements IProdBatchDAO {
 	private Connection createConnection() throws SQLException {
@@ -74,6 +75,54 @@ public class ProdBatchDAO implements IProdBatchDAO {
 		catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}
+	}
 
+	@Override
+	public IProdBatchDTO getProdBatch(int prodBatchId) throws DALException {
+		IProdBatchDTO prodBatch = new ProdBatchDTO();
+		try (Connection c = createConnection()){
+
+			Statement st = c.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Produkt_Batches WHERE produkt_batch_id = " + prodBatchId);
+			rs.next();
+
+			prodBatch.setProdBatchId(rs.getInt("produkt_batch_id"));
+			prodBatch.setRecipeId(rs.getInt("opskrift_id"));
+			prodBatch.setUserId(rs.getInt("bruger_id"));
+			prodBatch.setDate(rs.getDate("dato"));
+
+		} catch (SQLException e) {
+			throw new DALException(e.getMessage());
+		}
+		return prodBatch;
+
+	}
+
+
+	@Override
+	public List<IProdBatchDTO> getProdBatchList() throws DALException {
+		IProdBatchDTO prodBatch = new ProdBatchDTO();
+		List<IProdBatchDTO> prodBatchList = new ArrayList<>();
+
+		try (Connection c = createConnection()){
+
+			Statement st = c.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM Produkt_Batches");
+
+			while (rs.next())
+			{
+				prodBatch.setProdBatchId(rs.getInt("produkt_batch_id"));
+				prodBatch.setRecipeId(rs.getInt("opskrift_id"));
+				prodBatch.setUserId(rs.getInt("bruger_id"));
+				prodBatch.setDate(rs.getDate("dato"));
+
+				prodBatchList.add(prodBatch);
+			}
+
+		} catch (SQLException e) {
+			throw new DALException(e.getMessage());
+		}
+
+		return prodBatchList;
 	}
 }
