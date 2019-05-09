@@ -11,51 +11,44 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ProductDAO implements IProductDAO{
+
     private Connection createConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://ec2-52-30-211-3.eu-west-1.compute.amazonaws.com/s185086?"
                 + "user=s185086&password=PL9404AoCEaBAFfUjd9dG");
     }
     @Override
     public void createProduct (IProductDTO product) throws DALException   {
-        try{
-            Connection c = createConnection();
-            Statement statement = c.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT produkt_id FROM Produkter");
-            LinkedList<Integer> uid = new LinkedList<>();
-            boolean idUsed = false;
+        try(Connection c = createConnection()){
 
-            while (rs.next()) {
-                uid.add(rs.getInt("produkt_id"));
+            Statement statement = c.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Produkter WHERE produkt_id = " + product.getProductId());
+            LinkedList<Integer> uid = new LinkedList<>();
+
+            if (rs.next()) {
+                throw new DALException("ID already in use");
             }
+
+
             PreparedStatement st = c.prepareStatement("INSERT INTO Produkter VALUES (?,?)");
             PreparedStatement ps;
             int productId = product.getProductId();
             String productName = product.getProductName();
 
-            for (int i = 0; i < uid.size(); i++){
-                if (productId == uid.get(i)){
-                    System.out.println("Product ID in use");
-                    idUsed = true;
-                    break;
-                }
-            }
-            if (idUsed == false) {
-              st.setInt(1,productId);
-              st.setString(2, productName);
-              st.executeUpdate();
-              }
-              c.close();
+
+            st.setInt(1, productId);
+            st.setString(2, productName);
+            st.executeUpdate();
+
         } catch (SQLException e) {
-            throw new IProductDAO.DALException(e.getMessage());
+            throw new DALException(e.getMessage());
         }
     }
     @Override
-    public IProductDTO getProduct(int productId) throws DALException {
+    public IProductDTO getProductId(int productId) throws DALException {
 
         IProductDTO product = new ProductDTO();
 
-        try {
-            Connection c = createConnection();
+        try (Connection c = createConnection()){
 
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM Produkter WHERE produkt_id = " + productId);
@@ -65,13 +58,11 @@ public class ProductDAO implements IProductDAO{
             product.setProductName(rs.getString("produkt_navn"));
 
 
-            c.close();
         } catch (SQLException e) {
-            throw new IProductDAO.DALException(e.getMessage());
+            throw new DALException(e.getMessage());
         }
         return product;
     }
-}
 
     @Override
     public List<IProductDTO> getProductList() throws IProductDAO.DALException {
@@ -79,8 +70,7 @@ public class ProductDAO implements IProductDAO{
         IProductDTO product = new ProductDTO();
         List<IProductDTO> productList = new ArrayList<>();
 
-        try {
-            Connection c = createConnection();
+        try (Connection c = createConnection()){
             Statement st = c.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM Produkter");
 
@@ -92,9 +82,8 @@ public class ProductDAO implements IProductDAO{
                 productList.add(product);
             }
 
-            c.close();
         } catch (SQLException e) {
-            throw new IProductDAO.DALException(e.getMessage());
+            throw new DALException(e.getMessage());
         }
         return productList;
     }
@@ -103,8 +92,7 @@ public class ProductDAO implements IProductDAO{
     @Override
     public void updateProduct(IProductDTO product) throws IProductDAO.DALException {
 
-        try {
-            Connection c = createConnection();
+        try (Connection c = createConnection()){
             PreparedStatement st = c.prepareStatement("UPDATE Produkter SET produkt_navn = ? WHERE userID = ?");
             int productId = product.getProductId();
             String productName = product.getProductName();
@@ -113,9 +101,8 @@ public class ProductDAO implements IProductDAO{
             st.setString(2,productName);
             st.executeUpdate();
 
-            c.close();
         } catch (SQLException e) {
-            throw new IProductDAO.DALException(e.getMessage());
+            throw new DALException(e.getMessage());
         }
     }
 }

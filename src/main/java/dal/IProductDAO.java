@@ -9,6 +9,7 @@ public interface IProductDAO {
     void createProduct(IProductDTO product) throws DALException;
 
     IProductDTO getProductId(int productId) throws DALException;
+
     List<IProductDTO> getProductList() throws DALException;
 
     void updateProduct(IProductDTO product) throws DALException;
