@@ -44,7 +44,7 @@ public class ProductDAO implements IProductDAO{
         }
     }
     @Override
-    public IProductDTO getProductId(int productId) throws DALException {
+    public IProductDTO getProduct(int productId) throws DALException {
 
         IProductDTO product = new ProductDTO();
 

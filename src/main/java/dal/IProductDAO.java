@@ -8,7 +8,7 @@ public interface IProductDAO extends IDALException{
 
     void createProduct(IProductDTO product) throws DALException;
 
-    IProductDTO getProductId(int productId) throws DALException;
+    IProductDTO getProduct(int productId) throws DALException;
 
     List<IProductDTO> getProductList() throws DALException;
 
