@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.List;
 
 public interface IProductDTO {
     int getProductId();
@@ -11,8 +10,5 @@ public interface IProductDTO {
 
     void setProductName(String productName);
 
-    List<String> getProductList();
-
-    void setProductList(List<String> productList);
 
 }

@@ -90,6 +90,20 @@ public class ProdBatchDAO implements IProdBatchDAO {
 			prodBatch.setUserId(rs.getInt("bruger_id"));
 			prodBatch.setDate(rs.getDate("dato"));
 
+			rs = st.executeQuery("SELECT * FROM Produkt_Batches_Råvare_Batches WHERE produkt_batch_id = "+ prodBatchId);
+			List<Integer> matList = new ArrayList<>();
+			while (rs.next()){
+				matList.add(rs.getInt("råvare_batch_id"));
+			}
+			prodBatch.setMatList(matList);
+
+			rs = st.executeQuery("SELECT * FROM Laboranter_Produkt_Batches WHERE produkt_batch_id = "+ prodBatchId);
+			List<Integer> labList = new ArrayList<>();
+			while (rs.next()){
+				labList.add(rs.getInt("bruger_id"));
+			}
+			prodBatch.setLabList(labList);
+
 		} catch (SQLException e) {
 			throw new DALException(e.getMessage());
 		}

@@ -24,7 +24,6 @@ public class ProductDAO implements IProductDAO{
 
             Statement statement = c.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM Produkter WHERE produkt_id = " + product.getProductId());
-            LinkedList<Integer> uid = new LinkedList<>();
 
             if (rs.next()) {
                 throw new DALException("ID already in use");

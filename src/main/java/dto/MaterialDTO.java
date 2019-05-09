@@ -60,4 +60,8 @@ public class MaterialDTO implements Serializable, IMaterialDTO {
 	public void setOrder(boolean order) {
 		this.order = order;
 	}
+	@Override
+	public String toString(){
+		return "" + materialBatchId + ingredientId + userId + amount + date.toString() + order;
+	}
 }
