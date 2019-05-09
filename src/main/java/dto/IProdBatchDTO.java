@@ -8,6 +8,10 @@ public interface IProdBatchDTO {
 
 	void setProdBatchId(int prodBatchId);
 
+	int getUserId();
+
+	void setUserId(int userId);
+
 	int getRecipeId();
 
 	void setRecipeId(int recipeId);

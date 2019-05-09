@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ProdBatchDTO implements Serializable, IProdBatchDTO {
 	private int prodBatchId;
+	private int userId;
 	private int recipeId;
 	private Date date;
 	private List<Integer> matList;
@@ -18,6 +19,14 @@ public class ProdBatchDTO implements Serializable, IProdBatchDTO {
 	@Override
 	public void setProdBatchId(int prodBatchId){
 		this.prodBatchId = prodBatchId;
+	}
+	@Override
+	public int getUserId(){
+		return userId;
+	}
+	@Override
+	public void setUserId(int userId){
+		this.userId = userId;
 	}
 	@Override
 	public int getRecipeId(){
